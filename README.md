@@ -1,5 +1,5 @@
 
-# ExpandAcademy
+# ExpandAcademy 📖 📝 ✏️ 💻 🚀
 
 ## Descrição
 
@@ -48,3 +48,15 @@ Para rodar este projeto localmente, siga os passos abaixo:
    ```
 
 Acesse [http://localhost:5173](http://localhost:5173) para visualizar o projeto.
+
+---
+
+## 👨‍💻 **Desenvolvedor**  
+
+**Saul Vargas**  
+
+📩 **Contato:**  
+- 🔗 [LinkedIn](https://www.linkedin.com/in/saul-vargas-68a9734)  
+- 📞 [WhatsApp](https://wa.me/5551985027412?text=Olá%20Saul!)  
+
+---

@@ -1,18 +1,18 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { environment } from './environment.js';
+import process from "process";
 
-// Your web app's Firebase configuration
+// Firebase configuration using environment variables
 const firebaseConfig = {
-    apiKey: environment.firebase.apiKey,
-    authDomain: environment.firebase.authDomain,
-    projectId: environment.firebase.projectId,
-    storageBucket: environment.firebase.storageBucket,
-    messagingSenderId: environment.firebase.messagingSenderId,
-    appId: environment.firebase.appId
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID,
 };
 
-// Inicializa o Firebase
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 export default app;

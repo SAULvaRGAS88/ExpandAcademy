@@ -9,12 +9,46 @@ import {
 } from '@mui/material';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SelecionarTipoUsuario from './SelecionarTipoUsuario';
+import './Login.css';
+import { getUsuarioFarebase } from '../../services/conexoes/LogarUsuarios';
 
 export const Login = () => {
-
     const [open, setOpen] = useState(true);
     const handleClose = () => setOpen(false);
-    const [tipoUsuario, setTipoUsuario] = useState((tipoUsuario) => console.log('Tipo de usuário:', tipoUsuario));
+    const [tipoUsuario, setTipoUsuario] = useState('');
+    const [senha, setSenha] = useState('');
+    const [email, setEmail] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const verificarTipoUsuario = (tipo) => {
+        if (tipo === 'Aluno') {
+            console.log('Tipo de usuário:', tipo);
+        } else if (tipo === 'Professor') {
+            console.log('Tipo de usuário:', tipo);
+        } else if (tipo === 'Administrador') {
+            console.log('Tipo de usuário:', tipo);
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!email || !senha) {
+            console.error('Email e senha são obrigatórios!');
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            await getUsuarioFarebase(email, senha);
+
+            console.log('Acesso permitido!');
+        } catch (error) {
+            console.log('Acesso Negado!');
+            console.error('Erro no login:', error.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <Container
@@ -22,7 +56,13 @@ export const Login = () => {
             maxWidth="xs"
             className="d-flex justify-content-center align-items-center vh-100"
         >
-            {SelecionarTipoUsuario({ open, handleClose, setTipoUsuario })}
+            {open && (
+                <SelecionarTipoUsuario
+                    open={open}
+                    handleClose={handleClose}
+                    setTipoUsuario={setTipoUsuario}
+                />
+            )}
             <CssBaseline />
             <Box
                 sx={{
@@ -45,7 +85,7 @@ export const Login = () => {
                 </Typography>
 
                 {/* Form */}
-                <Box component="form" sx={{ mt: 1, width: '100%' }}>
+                <Box component="form" sx={{ mt: 1, width: '100%' }} onSubmit={handleSubmit}>
                     {/* Email Input */}
                     <TextField
                         margin="normal"
@@ -56,6 +96,7 @@ export const Login = () => {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        onChange={(e) => setEmail(e.target.value)}
                     />
 
                     {/* Password Input */}
@@ -68,6 +109,7 @@ export const Login = () => {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        onChange={(e) => setSenha(e.target.value)}
                     />
 
                     {/* Submit Button */}
@@ -79,19 +121,32 @@ export const Login = () => {
                             mt: 3,
                             mb: 2,
                             backgroundColor: '#007bff',
-                            ':hover': { backgroundColor: '#0056b3' },
+                            ':hover': { backgroundColor: 'green' },
+                            textTransform: 'none',
                         }}
+                        disabled={isLoading}
                     >
-                        Logar
+                        {isLoading ? 'Carregando...' : 'Logar'}
                     </Button>
 
                     {/* Additional Links */}
                     <div className="text-center mt-3">
                         <Typography variant="body2" color="textSecondary">
-                            Não tem uma conta? <a href="/register">Cadastre-se</a>
+                            Não tem uma conta?{' '}
+                            <span
+                                className="text-primary cursor-pointer"
+                                onClick={() => verificarTipoUsuario(tipoUsuario)}
+                            >
+                                Cadastre-se
+                            </span>
                         </Typography>
-                        <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                            <a href="/forgot-password">Esqueceu a senha?</a>
+                        <Typography variant="body2" color="textSecondary">
+                            <span
+                                className="text-primary cursor-pointer"
+                                onClick={() => verificarTipoUsuario(tipoUsuario)}
+                            >
+                                Esqueceu a senha?
+                            </span>
                         </Typography>
                     </div>
                 </Box>

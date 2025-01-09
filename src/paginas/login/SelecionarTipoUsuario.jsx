@@ -1,5 +1,8 @@
 import React from 'react';
 import { Button, Box, Typography, Modal } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import CastForEducationIcon from '@mui/icons-material/CastForEducation';
 
 const tipoUsuario = {
     aluno: 'Aluno',
@@ -11,7 +14,11 @@ const SelecionarTipoUsuario = ({ open, handleClose, setTipoUsuario }) => {
     return (
         <Modal
             open={open}
-            onClose={handleClose}
+            onClose={(reason) => {
+                if (reason === 'backdropClick') {
+                    return;
+                }
+            }}
             aria-labelledby="modal-title"
             aria-describedby="modal-description"
         >
@@ -21,16 +28,16 @@ const SelecionarTipoUsuario = ({ open, handleClose, setTipoUsuario }) => {
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: 400,
+                    width: { xs: 300, sm: 400 },
                     bgcolor: 'background.paper',
-                    border: '2px solid #000',
-                    boxShadow: 24,
-                    borderRadius: 2,
+                    boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.25)',
+                    borderRadius: 3,
                     p: 4,
+                    border: 'none',
                 }}
             >
                 {/* Modal Header */}
-                <Typography id="modal-title" variant="h6" component="h2" gutterBottom>
+                <Typography id="modal-title" variant="h6" component="h2" gutterBottom align="center">
                     Selecione o tipo de usuário
                 </Typography>
 
@@ -48,10 +55,12 @@ const SelecionarTipoUsuario = ({ open, handleClose, setTipoUsuario }) => {
                         variant="contained"
                         fullWidth
                         onClick={() => {
-                            console.log('Clicou em aluno', tipoUsuario.aluno);
+                            console.log('Clicou', tipoUsuario.aluno);
                             setTipoUsuario(tipoUsuario.aluno);
                             handleClose();
                         }}
+                        sx={{ textTransform: 'none' }}
+                        endIcon={<SentimentSatisfiedAltIcon />}
                     >
                         Aluno
                     </Button>
@@ -59,10 +68,12 @@ const SelecionarTipoUsuario = ({ open, handleClose, setTipoUsuario }) => {
                         variant="contained"
                         fullWidth
                         onClick={() => {
-                            console.log('Clicou em professor', tipoUsuario.professor);
+                            console.log('Clicou', tipoUsuario.professor);
                             setTipoUsuario(tipoUsuario.professor);
                             handleClose();
                         }}
+                        sx={{ textTransform: 'none' }}
+                        endIcon={<CastForEducationIcon />}
                     >
                         Professor
                     </Button>
@@ -70,10 +81,12 @@ const SelecionarTipoUsuario = ({ open, handleClose, setTipoUsuario }) => {
                         variant="contained"
                         fullWidth
                         onClick={() => {
-                            console.log('Clicou em administrador', tipoUsuario.administrador);
+                            console.log('Clicou', tipoUsuario.administrador);
                             setTipoUsuario(tipoUsuario.administrador);
                             handleClose();
                         }}
+                        sx={{ textTransform: 'none' }}
+                        endIcon={<SettingsIcon />}
                     >
                         Administrador
                     </Button>

@@ -42,6 +42,7 @@ export const Login = () => {
             await getUsuarioFarebase(email, senha);
 
             console.log('Acesso permitido!');
+            window.location.href = '/dashboard';
         } catch (error) {
             console.log('Acesso Negado!');
             console.error('Erro no login:', error.message);

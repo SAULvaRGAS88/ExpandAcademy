@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { BemVindo } from './paginas/bemVindo/BemVindo';
 import { Login } from './paginas/login/Login';
+import { DashBoard } from './paginas/dashBoard/DashBoard';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<BemVindo />} />
         <Route path="login" element={<Login />} />
+        <Route path="dashboard" element={<DashBoard />} />
       </Routes>
     </BrowserRouter>
   );

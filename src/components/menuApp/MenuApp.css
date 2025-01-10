@@ -1,0 +1,18 @@
+.menu-header {
+    background-color: #1976d2;
+    box-shadow: none;
+  }
+  
+  .menu-header .menu-items button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .menu-header a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .menu-header a:hover {
+    text-decoration: underline;
+  }
+  

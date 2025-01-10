@@ -6,19 +6,34 @@ import {
     Container,
     Box,
     CssBaseline,
+    Snackbar,
+    Alert,
 } from '@mui/material';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SelecionarTipoUsuario from './SelecionarTipoUsuario';
 import './Login.css';
 import { getUsuarioFarebase } from '../../services/conexoes/LogarUsuarios';
+import { useDataContext } from '../../context/ContextApp';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
-    const [open, setOpen] = useState(true);
-    const handleClose = () => setOpen(false);
     const [tipoUsuario, setTipoUsuario] = useState('');
     const [senha, setSenha] = useState('');
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [open, setOpen] = useState(true);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+    const navigate = useNavigate();
+    const { updateUsuario } = useDataContext();
+
+    const handleClose = () => setOpen(false);
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setSnackbarOpen(false);
+    };
 
     const verificarTipoUsuario = (tipo) => {
         if (tipo === 'Aluno') {
@@ -33,19 +48,31 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email || !senha) {
-            console.error('Email e senha são obrigatórios!');
+            setSnackbarMessage('Email e senha são obrigatórios!');
+            setSnackbarSeverity('warning');
+            setSnackbarOpen(true);
             return;
         }
 
         setIsLoading(true);
         try {
-            await getUsuarioFarebase(email, senha);
+            const resLogin = await getUsuarioFarebase(email, senha);
+            if (!resLogin) {
+                setSnackbarMessage('Usuário não encontrado!');
+                setSnackbarSeverity('error');
+                setSnackbarOpen(true);
+                return;
+            }
 
-            console.log('Acesso permitido!');
-            window.location.href = '/dashboard';
+            updateUsuario(resLogin.email);
+            setSnackbarMessage('Login realizado com sucesso!');
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+            navigate('/dashboard');
         } catch (error) {
-            console.log('Acesso Negado!');
-            console.error('Erro no login:', error.message);
+            setSnackbarMessage('Erro ao realizar login!');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
         } finally {
             setIsLoading(false);
         }
@@ -152,6 +179,23 @@ export const Login = () => {
                     </div>
                 </Box>
             </Box>
+
+            {/* Snackbar */}
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert
+                    onClose={handleSnackbarClose}
+                    severity={snackbarSeverity}
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </Container>
     );
 };

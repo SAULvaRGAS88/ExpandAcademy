@@ -18,7 +18,7 @@ export const MenuApp = () => {
     const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
     const handleMenuClose = () => setAnchorEl(null);
 
-    const menuItems = ['Dashboard', 'About', 'Services', 'Contact'];
+    const menuItems = ['Dashboard', 'Cursos', 'Professores', 'Alunos', 'Configurações', 'Sair'];
 
     // Atualiza largura da janela
     useEffect(() => {
@@ -27,77 +27,129 @@ export const MenuApp = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    const linkStyles = {
+        textDecoration: 'none',
+        color: 'inherit',
+        fontFamily: 'monospace',
+        fontWeight: 700,
+        fontSize: {
+            xs: '0.75rem',
+            sm: '0.875rem',
+            md: '1rem',
+        },
+        transition: 'color 0.3s, text-shadow 0.3s',
+        '&:hover': {
+            color: '#1abc9c', // Cor de destaque ao passar o mouse
+            textShadow: '0 0 5px #1abc9c',
+        },
+        '&:focus': {
+            color: '#ffeb3b',
+            outline: 'none',
+        },
+    };
+
     return (
-        <AppBar position="static" sx={{ background: '#1976d2' }}>
-            <Container maxWidth="lg">
-                <Toolbar>
-                    {/* Logotipo */}
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="/dashboard"
-                        sx={{
-                            mr: 2,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            color: 'inherit',
-                            textDecoration: 'none',
-                            display: 'flex',
-                        }}
-                    >
-                        Expand Academy
-                    </Typography>
+        <AppBar position="static" sx={{ background: '#2c3e50' }}>
 
-                    {/* Menu Mobile ou Desktop */}
-                    {windowWidth < 900 ? (
-                        <>
-                            {/* Ícone para Mobile */}
-                            <IconButton
-                                size="large"
-                                edge="end"
-                                color="inherit"
-                                aria-label="menu"
-                                sx={{ ml: 'auto' }}
-                                onClick={handleMenuOpen}
-                            >
-                                <MenuIcon />
-                            </IconButton>
+            <Toolbar>
+                {/* Logotipo */}
+                <Typography
+                    variant="h6"
+                    noWrap
+                    component="a"
+                    href="/dashboard"
+                    sx={{
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        color: 'inherit',
+                        textDecoration: 'none',
+                        display: 'flex',
+                        fontSize: {
+                            xs: '1rem',
+                            sm: '1.25rem',
+                            md: '1.5rem',
+                        },
+                        whiteSpace: {
+                            xs: 'nowrap',
+                            sm: 'normal',
+                        },
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                    }}
+                >
+                    Expand Academy
+                </Typography>
 
-                            {/* Menu Suspenso no Mobile */}
-                            <Menu
-                                anchorEl={anchorEl}
-                                open={open}
-                                onClose={handleMenuClose}
-                                sx={{ display: { xs: 'block', md: 'none' } }}
-                            >
-                                {menuItems.map((item) => (
-                                    <MenuItem key={item} onClick={handleMenuClose}>
-                                        <Typography textAlign="center">{item}</Typography>
-                                    </MenuItem>
-                                ))}
-                            </Menu>
-                        </>
-                    ) : (
-                        // Menu Desktop
-                        <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                {/* Menu Mobile ou Desktop */}
+                {windowWidth < 900 ? (
+                    <>
+                        {/* Ícone para Mobile */}
+                        <IconButton
+                            size="large"
+                            edge="end"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{ ml: 'auto' }}
+                            onClick={handleMenuOpen}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+
+                        {/* Menu Suspenso no Mobile */}
+                        <Menu
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleMenuClose}
+                            sx={{ display: { xs: 'block', md: 'none' } }}
+                        >
                             {menuItems.map((item) => (
-                                <Button
-                                    key={item}
-                                    href={`#${item.toLowerCase()}`}
-                                    sx={{
-                                        my: 2,
-                                        color: 'white',
-                                        display: 'inline-flex',
-                                    }}
-                                >
-                                    {item}
-                                </Button>
+                                <MenuItem key={item} onClick={handleMenuClose}>
+                                    <Typography
+                                        component="a"
+                                        href={`/${item.toLowerCase()}`}
+                                        textAlign="center"
+                                        sx={linkStyles}
+                                    >
+                                        {item}
+                                    </Typography>
+                                </MenuItem>
                             ))}
-                        </div>
-                    )}
-                </Toolbar>
-            </Container>
+                        </Menu>
+                    </>
+                ) : (
+                    // Menu Desktop
+                    <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                        <ul style={{ display: 'flex', listStyleType: 'none', margin: 0, padding: 0, gap: '1.5rem' }}>
+                            {menuItems.map((item) => (
+                                <li key={item} style={{ margin: 0, padding: 0 }}>
+                                    <a
+                                        href={`#${item.toLowerCase()}`}
+                                        style={{
+                                            textDecoration: 'none',
+                                            color: 'white',
+                                            fontFamily: 'monospace',
+                                            fontWeight: 700,
+                                            fontSize: '1rem',
+                                            transition: 'color 0.3s, text-shadow 0.3s',
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.target.style.color = '#1abc9c';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.target.style.color = 'white';
+                                            e.target.style.textShadow = 'none';
+                                        }}
+                                    >
+                                        {item}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                )}
+            </Toolbar>
+
         </AppBar>
     );
 };

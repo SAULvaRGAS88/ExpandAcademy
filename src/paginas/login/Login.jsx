@@ -26,7 +26,7 @@ export const Login = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
     const navigate = useNavigate();
-    const { updateUsuario } = useDataContext();
+    const { setUsuarioLogado } = useDataContext();
 
     const handleClose = () => setOpen(false);
 
@@ -64,7 +64,7 @@ export const Login = () => {
                 return;
             }
 
-            updateUsuario(resLogin.email);
+            setUsuarioLogado(resLogin.email);
             setSnackbarMessage('Login realizado com sucesso!');
             setSnackbarSeverity('success');
             setSnackbarOpen(true);

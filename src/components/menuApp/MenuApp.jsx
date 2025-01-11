@@ -6,19 +6,39 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
+import { useDataContext } from '../../context/ContextApp';
+import { useNavigate } from 'react-router-dom'; // Importa o hook useNavigate
+import { Modal } from '@mui/material';
+import './MenuApp.css';
+
 
 export const MenuApp = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
+    const { handleLogout } = useDataContext();
+    const navigate = useNavigate();
     const open = Boolean(anchorEl);
-
+    const [showModal, setShowModal] = useState(false);
     const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
     const handleMenuClose = () => setAnchorEl(null);
 
-    const menuItems = ['Dashboard', 'Cursos', 'Professores', 'Alunos', 'Configurações', 'Sair'];
+    const menuItems = ['Dashboard', 'Professores', 'Cursos', 'Alunos', 'Configurações', 'Sair'];
+
+
+
+    const handleMenuClick = (item) => {
+        if (item === 'Sair') {
+            setShowModal(true);
+        } else {
+            navigate(`/${item.toLowerCase()}`);
+        }
+    };
+
+    const handleLogoutConfirmed = () => {
+        handleLogout(); // Realiza o logout
+        navigate("/"); // Redireciona para a página de login
+        setShowModal(false); // Fecha o modal após o logout
+    };
 
     // Atualiza largura da janela
     useEffect(() => {
@@ -27,58 +47,85 @@ export const MenuApp = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const linkStyles = {
-        textDecoration: 'none',
-        color: 'inherit',
-        fontFamily: 'monospace',
-        fontWeight: 700,
-        fontSize: {
-            xs: '0.75rem',
-            sm: '0.875rem',
-            md: '1rem',
-        },
-        transition: 'color 0.3s, text-shadow 0.3s',
-        '&:hover': {
-            color: '#1abc9c', // Cor de destaque ao passar o mouse
-            textShadow: '0 0 5px #1abc9c',
-        },
-        '&:focus': {
-            color: '#ffeb3b',
-            outline: 'none',
-        },
-    };
-
     return (
-        <AppBar position="static" sx={{ background: '#2c3e50' }}>
+        <AppBar position="static" sx={{ background: '#1976d2' }}>
+
+            {showModal && (
+                <Modal
+                    open={showModal}
+                    onClose={() => setShowModal(false)}
+                    aria-labelledby="modalSairLabel"
+                    aria-describedby="modalSairDescription"
+                >
+                    <div className="modal-overlay">
+                        <div className="modal-container">
+                            <div className="modal-header">
+                                <h5 id="modalSairLabel" className="modal-title">Sair</h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={() => setShowModal(false)}
+                                    aria-label="Close"
+                                />
+                            </div>
+                            <div id="modalSairDescription" className="modal-body">
+                                Tem certeza que deseja sair?
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={() => setShowModal(false)}
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={handleLogoutConfirmed}
+                                >
+                                    Sair da Conta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </Modal>
+            )}
+
 
             <Toolbar>
                 {/* Logotipo */}
-                <Typography
-                    variant="h6"
-                    noWrap
-                    component="a"
-                    href="/dashboard"
-                    sx={{
-                        fontFamily: 'monospace',
-                        fontWeight: 700,
-                        color: 'inherit',
-                        textDecoration: 'none',
-                        display: 'flex',
-                        fontSize: {
-                            xs: '1rem',
-                            sm: '1.25rem',
-                            md: '1.5rem',
-                        },
-                        whiteSpace: {
-                            xs: 'nowrap',
-                            sm: 'normal',
-                        },
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                    }}
-                >
-                    Expand Academy
-                </Typography>
+                <div className="logo-container">
+                    <img src="/logo-quebra-cabeça.svg" alt="Logotipo" className="logo" />
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        component="a"
+                        href="/dashboard"
+                        color='grey.50'
+                        sx={{
+                            fontFamily: 'monospace',
+                            fontWeight: 700,
+                            color: 'inherit',
+                            textDecoration: 'none',
+                            display: 'flex',
+                            fontSize: {
+                                xs: '1rem',
+                                sm: '1.25rem',
+                                md: '1.5rem',
+                            },
+                            whiteSpace: {
+                                xs: 'nowrap',
+                                sm: 'normal',
+                            },
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                        }}
+                    >
+                        Expand Academy
+                    </Typography>
+                </div>
+
 
                 {/* Menu Mobile ou Desktop */}
                 {windowWidth < 900 ? (
@@ -103,12 +150,13 @@ export const MenuApp = () => {
                             sx={{ display: { xs: 'block', md: 'none' } }}
                         >
                             {menuItems.map((item) => (
-                                <MenuItem key={item} onClick={handleMenuClose}>
+                                <MenuItem key={item} onClick={() => handleMenuClick(item)}>
                                     <Typography
                                         component="a"
-                                        href={`/${item.toLowerCase()}`}
+                                        href={item === 'Sair' ? '#' : `/${item.toLowerCase()}`} // Condiciona a navegação
                                         textAlign="center"
-                                        sx={linkStyles}
+                                        // sx={linkStyles}
+                                        className='menu-item-typography'
                                     >
                                         {item}
                                     </Typography>
@@ -118,20 +166,11 @@ export const MenuApp = () => {
                     </>
                 ) : (
                     // Menu Desktop
-                    <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
-                        <ul style={{ display: 'flex', listStyleType: 'none', margin: 0, padding: 0, gap: '1.5rem' }}>
+                    <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', }}>
+                        <ul style={{ display: 'flex', listStyleType: 'none', margin: 0, padding: 0, alignItems: 'center', gap: '1rem' }}>
                             {menuItems.map((item) => (
-                                <li key={item} style={{ margin: 0, padding: 0 }}>
-                                    <a
-                                        href={`#${item.toLowerCase()}`}
-                                        style={{
-                                            textDecoration: 'none',
-                                            color: 'white',
-                                            fontFamily: 'monospace',
-                                            fontWeight: 700,
-                                            fontSize: '1rem',
-                                            transition: 'color 0.3s, text-shadow 0.3s',
-                                        }}
+                                <li key={item} style={{ margin: 0, padding: 0 }} onClick={() => handleMenuClick(item)}>
+                                    <p className='menu-item-p'
                                         onMouseEnter={(e) => {
                                             e.target.style.color = '#1abc9c';
                                         }}
@@ -141,15 +180,13 @@ export const MenuApp = () => {
                                         }}
                                     >
                                         {item}
-                                    </a>
+                                    </p>
                                 </li>
                             ))}
                         </ul>
                     </div>
-
                 )}
             </Toolbar>
-
         </AppBar>
     );
 };

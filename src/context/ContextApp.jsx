@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ContextApp = createContext();
 
@@ -8,6 +9,7 @@ export const useDataContext = () => {
 
 export const ContextAppProvider = ({ children }) => {
 
+    const navigate = useNavigate();
     const [usuarioLogado, setUsuarioLogado] = useState(() => {
         const savedUser = localStorage.getItem('usuarioLogado');
         return savedUser ? JSON.parse(savedUser) : null;
@@ -21,14 +23,20 @@ export const ContextAppProvider = ({ children }) => {
         }
     }, [usuarioLogado]);
 
-    /** Função para atualizar os dados do contexto */
-    const updateUsuario = (newData) => {
-        setUsuarioLogado(newData);
+    // Função de logout
+    const handleLogout = () => {
+        console.log("Logout realizado com sucesso");
+        // Limpar o usuário do localStorage
+        localStorage.removeItem("usuarioLogado");
+        // Atualizar o estado do contexto
+        setUsuarioLogado(null);
+        // Redirecionar para a página de login ou outro destino
+        navigate("/");
     };
 
     return (
         <ContextApp.Provider value={{
-            usuarioLogado, updateUsuario
+            usuarioLogado, handleLogout, setUsuarioLogado
         }}>
             {children}
         </ContextApp.Provider>

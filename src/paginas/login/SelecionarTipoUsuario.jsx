@@ -3,6 +3,7 @@ import { Button, Box, Typography, Modal } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import CastForEducationIcon from '@mui/icons-material/CastForEducation';
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 
 const tipoUsuario = {
     aluno: 'Aluno',
@@ -31,7 +32,7 @@ const SelecionarTipoUsuario = ({ open, handleClose, setTipoUsuario }) => {
                     width: { xs: 300, sm: 400 },
                     bgcolor: 'background.paper',
                     boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.25)',
-                    borderRadius: 3,
+                    borderRadius: 1,
                     p: 4,
                     border: 'none',
                 }}
@@ -60,7 +61,7 @@ const SelecionarTipoUsuario = ({ open, handleClose, setTipoUsuario }) => {
                             handleClose();
                         }}
                         sx={{ textTransform: 'none' }}
-                        endIcon={<SentimentSatisfiedAltIcon />}
+                        endIcon={<LocalLibraryIcon />}
                     >
                         Aluno
                     </Button>

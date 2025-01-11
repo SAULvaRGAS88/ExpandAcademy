@@ -3,8 +3,15 @@ import React from 'react';
 import './DashApp.css';
 import { MenuApp } from '../../components/menuApp/MenuApp';
 import { InformativoDashAside } from './InformativoDashAside';
+import { useNavigate } from 'react-router-dom';
 
 export const DashApp = ({ children }) => {
+
+    const navegate = useNavigate();
+
+    const handledireciona = (item) => {
+        navegate(`/${item.toLowerCase()}`)
+    }
 
     return (
         <div className="dashboard">
@@ -18,11 +25,11 @@ export const DashApp = ({ children }) => {
                 <aside className="dashboard-aside">
                     <nav>
                         <ul>
-                            <li><a href="#cursos">Cursos</a></li>
-                            <li><a href="#professores">Professores</a></li>
-                            <li><a href="#alunos">Alunos</a></li>
-                            <li><a href="#configuracoes">Configurações</a></li>
-                            <li><a href="#fale-conosco">Suporte</a></li>
+                            <li className='active' onClick={() => handledireciona('professores')}>Professores</li>
+                            <li className='active' onClick={() => handledireciona('cursos')}>Cursos</li>
+                            <li className='active' onClick={() => handledireciona('alunos')}>Alunos</li>
+                            <li className='active' onClick={() => handledireciona('configurações')}>Configurações</li>
+                            <li className='active' onClick={() => handledireciona('suporte')}>Suporte</li>
                         </ul>
                         <InformativoDashAside />
                     </nav>
@@ -36,7 +43,7 @@ export const DashApp = ({ children }) => {
 
             {/* Rodapé */}
             <footer className="dashboard-footer">
-                <p>&copy; 2024 ExpandAcademy. Todos os direitos reservados.</p>
+                <p>&copy; 2025 ExpandAcademy. Todos os direitos reservados.</p>
             </footer>
         </div>
     );
